@@ -46,5 +46,6 @@ int main(int ac __attribute__((unused)), char **av __attribute__
 			wait(&status);
 	}
 	putchar('\n');
+	free(buffer);
 	return (0);
 }
