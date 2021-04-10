@@ -4,14 +4,12 @@
   * main - entry point of the program
   * @ac: argument counter.
   * @av: argument vector.
-  * @envp: NULL terminated array of strings.
   * Return: 0
   */
-int main(int ac __attribute__((unused)), char **av __attribute__
-		((unused)), char **envp)
+int main(int ac __attribute__((unused)), char **av __attribute__((unused)))
 {
-	char *buffer, *token;
-	int characters, status;
+	char *buffer, *token, *cmd[20];
+	int characters, status, i;
 	size_t bufsize = 1024;
 	pid_t child_pid;
 
@@ -20,23 +18,22 @@ int main(int ac __attribute__((unused)), char **av __attribute__
 		return (0);
 	while (1)
 	{
-		/* prompt for the user to enter command */
 		printf("~$ ");
-		/* reading line typed by user from stdin */
 		characters = getline(&buffer, &bufsize, stdin);
 		if (characters == -1)
 			break;
-		/* split what user enters to obtain the first word/command */
-		token = strtok(buffer, "\n");
-		/* create a new process */
+		token = strtok(buffer, " \n\t");
+		for (i = 0; i < 20 && token != NULL; i++)
+		{
+			cmd[i] = token;
+			token = strtok(NULL, " \n\t");
+		}
+		cmd[i] = NULL;
 		child_pid = fork();
-		/* cmd will hold the first word/command from stdin */
-		char *cmd[] = {token, NULL};
 
 		if (child_pid == 0)
 		{
-			/* creating a separate process using execve sys call */
-			if (execve(cmd[0], cmd, envp))
+			if (execve(cmd[0], cmd, NULL))
 			{
 				perror("execve");
 				exit(EXIT_FAILURE);
