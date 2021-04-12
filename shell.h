@@ -11,4 +11,6 @@ extern char **environ;
 #include <sys/types.h>
 void print_environ();
 int _strcmp(char *s1, char *s2);
+int handle_exit(char **cmd);
+int *handlebin(char **cmd, alias **head);
 #endif
