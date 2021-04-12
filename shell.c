@@ -23,9 +23,9 @@ int main(int ac __attribute__((unused)), char **av __attribute__((unused)))
 		if (characters == -1)
 			break;
 		token = strtok(buffer, " \n");
-		if (strcmp(token, "exit") == 0)
+		if (_strcmp(token, "exit") == 0)
 			return (0);
-		if (strcmp(token, "env") == 0)
+		if (_strcmp(token, "env") == 0)
 		{
 			print_environ();
 		}
@@ -34,7 +34,7 @@ int main(int ac __attribute__((unused)), char **av __attribute__((unused)))
 			for (i = 0; i < 20 && token != NULL; i++)
 			{
 				cmd[i] = token;
-				if (strcmp(cmd[i], "exit") == 0)
+				if (_strcmp(cmd[i], "exit") == 0)
 					return (0);
 
 				token = strtok(NULL, " \n");
