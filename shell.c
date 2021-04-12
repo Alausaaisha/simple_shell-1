@@ -8,7 +8,7 @@
   */
 int main(int ac __attribute__((unused)), char **av __attribute__((unused)))
 {
-	char *buffer, *token, *cmd[20];
+	char *buffer, *token, *cmd[100];
 	int characters, status, i;
 	size_t bufsize = 1024;
 	pid_t child_pid;
@@ -22,21 +22,32 @@ int main(int ac __attribute__((unused)), char **av __attribute__((unused)))
 		characters = getline(&buffer, &bufsize, stdin);
 		if (characters == -1)
 			break;
-		token = strtok(buffer, " \n\t");
-		for (i = 0; i < 20 && token != NULL; i++)
+		token = strtok(buffer, " \n");
+		if (strcmp(token, "exit") == 0)
+			return (0);
+		if (strcmp(token, "env") == 0)
 		{
-			cmd[i] = token;
-			token = strtok(NULL, " \n\t");
+			print_environ();
 		}
-		cmd[i] = NULL;
-		child_pid = fork();
-
-		if (child_pid == 0)
+		else
 		{
-			if (execve(cmd[0], cmd, NULL))
+			for (i = 0; i < 20 && token != NULL; i++)
 			{
-				perror("execve");
-				exit(EXIT_FAILURE);
+				cmd[i] = token;
+				if (strcmp(cmd[i], "exit") == 0)
+					return (0);
+
+				token = strtok(NULL, " \n");
+			}
+			cmd[i] = NULL;
+			child_pid = fork();
+			if (child_pid == 0)
+			{
+				if (execve(cmd[0], cmd, NULL))
+				{
+					perror("execve");
+					exit(EXIT_FAILURE);
+				}
 			}
 		}
 		if (child_pid > 0)
