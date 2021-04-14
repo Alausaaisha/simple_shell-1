@@ -27,6 +27,7 @@ int main(void)
 		if (_strcmp(cmd[0], "env") == 0)
 		{
 			print_environ();
+			free(cmd);
 			continue;
 		}
 		if (_strcmp(cmd[0], "exit") == 0)
@@ -40,8 +41,8 @@ int main(void)
 				perror("execve"), exit(EXIT_FAILURE);
 		}
 		wait(&status);
+		free(buffer);
 		free(cmd);
 	}
-	free(buffer);
 	return (0);
 }
