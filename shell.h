@@ -9,8 +9,12 @@ extern char **environ;
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-void print_environ();
+void print_environ(void);
 int _strcmp(char *s1, char *s2);
-int handle_exit(char **cmd);
-int *handlebin(char **cmd, alias **head);
+char **parse_input_string(char *buffer);
+char *path_search(char *cmd);
+char *_strncat(char *dest, char *src, int n);
+int string_length(char *pointer);
+char *_strcat(char *dest, char *src);
+char *_strchr(char *s, char c);
 #endif
