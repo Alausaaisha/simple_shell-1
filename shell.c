@@ -2,58 +2,60 @@
 
 /**
   * main - entry point of the program
-  * @ac: argument counter.
-  * @av: argument vector.
   * Return: 0
   */
-int main(int ac __attribute__((unused)), char **av __attribute__((unused)))
+int main(void)
 {
-	char *buffer, *token, *cmd[100];
-	int characters, status, i;
-	size_t bufsize = 1024;
+	char *buffer = NULL, **cmd = NULL;
+	int status;
+	size_t bufsize = 0;
 	pid_t child_pid;
 
-	buffer = (char *)malloc(bufsize);
-	if (buffer == NULL)
-		return (0);
+	signal(SIGINT, SIG_IGN);
 	while (1)
 	{
 		printf("~$ ");
-		characters = getline(&buffer, &bufsize, stdin);
-		if (characters == -1)
+		if (getline(&buffer, &bufsize, stdin) == -1)
 			break;
-		token = strtok(buffer, " \n");
-		if (_strcmp(token, "exit") == 0)
-			return (0);
-		if (_strcmp(token, "env") == 0)
+		if (buffer == NULL)
+		{
+			perror("memory allocation failed");
+			exit(0);
+		}
+		cmd = parse_input_string(buffer);
+		if (!cmd[0])
+		{
+			free(cmd);
+			continue;
+		}
+		if (_strcmp(cmd[0], "env") == 0)
 		{
 			print_environ();
+			continue;
 		}
-		else
+		if (_strcmp(cmd[0], "exit") == 0)
 		{
-			for (i = 0; i < 20 && token != NULL; i++)
+			free(cmd);
+			free(buffer);
+			return (0);
+		}
+		child_pid = fork();
+		if (child_pid < 0)
+			perror("could not create child process");
+		else if (child_pid == 0)
+		{
+			if (_strchr(cmd[0], '/') == NULL)
+				cmd[0] = path_search(cmd[0]);
+			if (execve(cmd[0], cmd, NULL))
 			{
-				cmd[i] = token;
-				if (_strcmp(cmd[i], "exit") == 0)
-					return (0);
-
-				token = strtok(NULL, " \n");
-			}
-			cmd[i] = NULL;
-			child_pid = fork();
-			if (child_pid == 0)
-			{
-				if (execve(cmd[0], cmd, NULL))
-				{
-					perror("execve");
-					exit(EXIT_FAILURE);
-				}
+				perror("execve");
+				exit(EXIT_FAILURE);
 			}
 		}
-		if (child_pid > 0)
+		else if (child_pid > 0)
 			wait(&status);
+		free(cmd);
 	}
-	putchar('\n');
 	free(buffer);
 	return (0);
 }
