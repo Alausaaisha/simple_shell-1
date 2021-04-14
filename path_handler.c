@@ -14,10 +14,6 @@ char *path_search(char *cmd)
 	path = getenv("PATH");
 	token = strtok(path, ":");
 	if (dirs == NULL)
-	{
-		perror("memory could not be allocated");
-		exit(EXIT_FAILURE);
-	}
 	i = 0;
 	while (token != NULL)
 	{
