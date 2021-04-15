@@ -22,8 +22,8 @@ char **parse_input_string(char *buffer)
 	while (token != NULL)
 	{
 		cmd[i] = token;
-		token = strtok(NULL, " \n");
 		i++;
+		token = strtok(NULL, " \n");
 	}
 	cmd[i] = NULL;
 	return (cmd);
