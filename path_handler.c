@@ -10,6 +10,8 @@ char *path_search(char *cmd)
 	char *path = NULL, *token = NULL, ch = '/';
 	char *dirs[1024];
 	int i;
+	char *cwd = getcwd(NULL, 0);
+	struct stat sb;
 
 	path = getenv("PATH");
 	token = strtok(path, ":");
@@ -22,8 +24,6 @@ char *path_search(char *cmd)
 		i++;
 	}
 	dirs[i] = NULL;
-	char *cwd = getcwd(NULL, 0);
-	struct stat sb;
 
 	i = 0;
 	while (dirs[i] != NULL)
