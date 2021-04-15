@@ -41,8 +41,8 @@ int main(void)
 				perror("execve"), exit(EXIT_FAILURE);
 		}
 		wait(&status);
-		free(buffer);
 		free(cmd);
 	}
+	free(buffer);
 	return (0);
 }
