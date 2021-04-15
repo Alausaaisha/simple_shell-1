@@ -1,11 +1,14 @@
 #include "shell.h"
 /**
   * main - entry point of the program
+  * @ac: argument counter
+  * @av: argument vector
+  * @envp: array of strings.
   * Return: 0
   */
-int main(void)
+int main(int ac __attribute__((unused)), char *av[], char *envp[])
 {
-	char *buffer = NULL, **cmd = NULL;
+	char *buffer = NULL;
 	size_t bufsize = 0;
 	int status;
 	pid_t child_pid;
@@ -18,30 +21,30 @@ int main(void)
 			break;
 		if (buffer == NULL)
 			exit(0);
-		cmd = parse_input_string(buffer);
-		if (!cmd[0])
+		av = parse_input_string(buffer);
+		if (!av[0])
 		{
-			free(cmd);
+			free(av);
 			continue;
 		}
-		if (_strcmp(cmd[0], "env") == 0)
+		if (_strcmp(av[0], "env") == 0)
 		{
 			print_environ();
-			free(cmd);
+			free(av);
 			continue;
 		}
-		if (_strcmp(cmd[0], "exit") == 0)
-			free(cmd), free(buffer), exit(0);
+		if (_strcmp(av[0], "exit") == 0)
+			free(av), free(buffer), exit(0);
 		child_pid = fork();
 		if (child_pid == 0)
 		{
-			if (_strchr(cmd[0], '/') == NULL)
-				cmd[0] = path_search(cmd[0]);
-			if (execve(cmd[0], cmd, NULL))
+			if (_strchr(av[0], '/') == NULL)
+				av[0] = path_search(av[0]);
+			if (execve(av[0], av, envp))
 				perror("execve"), exit(EXIT_FAILURE);
 		}
 		wait(&status);
-		free(cmd);
+		free(av);
 	}
 	free(buffer);
 	return (0);
