@@ -30,7 +30,7 @@ Type `./run_simple_shell.sh` on your terminal. This will enable you to run hsh s
 If you need help to get started with hsh simple shell, email one of the contributers as listed in [AUTHORS](https://github.com/kiminzajnr/simple_shell/blob/master/AUTHORS).
 
 ---
-## Future releses  
+## Future releases  
 
 We look forward to continual development of hsh simple shell to improve and add features for the next one year during our curriculum at [School of Holberton](https://www.holbertonschool.com/).
 
