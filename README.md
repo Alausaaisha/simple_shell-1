@@ -11,8 +11,8 @@ hsh Simple Shell is a toy clone of the Bash shell. It implements some of the fun
 ---
 ## Setup  
 
- $ git clone `https://github.com/kiminzajnr/simple_shell.git`  
- $ 'cd' simple_shell
+ $ `git clone https://github.com/kiminzajnr/simple_shell.git`  
+ $ `cd simple_shell`
 
 ---
 ## Technologies used  
