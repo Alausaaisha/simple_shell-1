@@ -16,7 +16,8 @@ int main(int ac __attribute__((unused)), char *av[], char *envp[])
 	signal(SIGINT, SIG_IGN);
 	while (1)
 	{
-		printf("~$ ");
+		if (isatty(STDIN_FILENO))
+			printf("~$ ");
 		if (getline(&buffer, &bufsize, stdin) == -1)
 			break;
 		if (buffer == NULL)
@@ -29,8 +30,7 @@ int main(int ac __attribute__((unused)), char *av[], char *envp[])
 		}
 		if (_strcmp(av[0], "env") == 0)
 		{
-			print_environ();
-			free(av);
+			print_environ(), free(av);
 			continue;
 		}
 		if (_strcmp(av[0], "exit") == 0)
@@ -43,8 +43,7 @@ int main(int ac __attribute__((unused)), char *av[], char *envp[])
 			if (execve(av[0], av, envp))
 				perror("execve"), exit(EXIT_FAILURE);
 		}
-		wait(&status);
-		free(av);
+		wait(&status), free(av);
 	}
 	free(buffer);
 	return (0);
