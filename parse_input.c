@@ -8,7 +8,7 @@
 char **parse_input_string(char *buffer)
 {
 	char **cmd = NULL;
-	char *token = NULL;
+	char *token, *delimeter = " \n";
 	int i;
 
 	cmd = malloc(sizeof(char *) * 1024);
@@ -17,13 +17,13 @@ char **parse_input_string(char *buffer)
 		perror("memory could not be allocated");
 		exit(EXIT_FAILURE);
 	}
-	token = strtok(buffer, " \n");
+	token = strtok(buffer, delimeter);
 	i = 0;
 	while (token != NULL)
 	{
 		cmd[i] = token;
+		token = strtok(NULL, delimeter);
 		i++;
-		token = strtok(NULL, " \n");
 	}
 	cmd[i] = NULL;
 	return (cmd);
