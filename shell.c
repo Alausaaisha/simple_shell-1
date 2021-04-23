@@ -41,7 +41,10 @@ int main(int ac __attribute__((unused)), char *av[], char *envp[])
 			if (_strchr(av[0], '/') == NULL)
 				av[0] = path_search(av[0]);
 			if (execve(av[0], av, envp))
+			{
 				perror("execve"), exit(EXIT_FAILURE);
+				break;
+			}
 		}
 		wait(&status), free(av);
 	}
